@@ -22,7 +22,7 @@
             const apiKey = "34311394cd354a84a9380100233107";
             const city = document.getElementById("city").value;
 
-            fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=yes`)
+            fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=yes`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error("City not found. Please enter a valid city name.");
@@ -61,5 +61,3 @@
     </script>
 </body>
 </html>
-
-
