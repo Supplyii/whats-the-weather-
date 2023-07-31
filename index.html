@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-r from-blue-400 to-purple-500 min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-lg p-8 shadow-md w-96">
+        <h1 class="text-3xl font-semibold mb-6">What's the Weather?</h1>
+        <div class="mb-6">
+            <label for="city" class="block mb-2 text-lg">City:</label>
+            <input type="text" id="city" class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300" placeholder="Enter city name">
+        </div>
+        <button class="w-full py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600" onclick="getWeather()">Get Weather</button>
+        <div id="weather-info" class="mt-8"></div>
+    </div>
+
+    <script>
+        function getWeather() {
+            const apiKey = "34311394cd354a84a9380100233107";
+            const city = document.getElementById("city").value;
+
+            fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=yes`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("City not found. Please enter a valid city name.");
+                    }
+                    return response.json();
+                })
+                .then(data => displayWeather(data))
+                .catch(error => {
+                    alert(error.message);
+                });
+        }
+
+        function displayWeather(data) {
+            const weatherInfo = document.getElementById("weather-info");
+            const cityName = data.location.name;
+            const tempC = data.current.temp_c;
+            const tempF = data.current.temp_f;
+            const description = data.current.condition.text;
+            const iconUrl = data.current.condition.icon;
+            const humidity = data.current.humidity;
+            const windKph = data.current.wind_kph;
+            const aqi = data.current.air_quality.pm10;
+
+            weatherInfo.innerHTML = `
+                <h2 class="text-2xl font-semibold mb-4">Weather in ${cityName}</h2>
+                <div class="flex items-center mb-4">
+                    <img src="${iconUrl}" alt="Weather Icon" class="w-16 h-16 mr-4">
+                    <p class="text-xl">Temperature: ${tempC} °C / ${tempF} °F</p>
+                </div>
+                <p class="text-lg">Description: ${description}</p>
+                <p class="text-lg">Humidity: ${humidity}%</p>
+                <p class="text-lg">Wind Speed: ${windKph} km/h</p>
+                <p class="text-lg">Air Quality Index (AQI): ${aqi}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
+
+
